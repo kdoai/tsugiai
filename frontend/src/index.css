@@ -1,0 +1,309 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@keyframes voiceBar {
+  0% {
+    height: 10px;
+  }
+  50% {
+    height: 36px;
+  }
+  100% {
+    height: 18px;
+  }
+}
+
+@layer base {
+  html {
+    font-family: "Hiragino Kaku Gothic ProN", "Hiragino Sans", "Meiryo", sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  body {
+    @apply bg-[#f8f9fa] text-[#202124] antialiased min-h-screen;
+  }
+
+  ::selection {
+    @apply bg-primary-100 text-primary-900;
+  }
+}
+
+@layer components {
+  /* ========================================
+     Buttons - Material Design Style
+     ======================================== */
+  .btn {
+    @apply inline-flex items-center justify-center px-4 py-2 rounded font-medium text-sm
+           transition-all duration-150
+           focus:outline-none focus:ring-2 focus:ring-offset-2
+           disabled:opacity-50 disabled:cursor-not-allowed;
+  }
+
+  .btn-primary {
+    @apply bg-primary-600 text-white
+           hover:bg-primary-700
+           focus:ring-primary-600
+           shadow-elevation-1 hover:shadow-elevation-2;
+  }
+
+  .btn-secondary {
+    @apply bg-white text-[#5f6368]
+           border border-[#dadce0]
+           hover:bg-[#f8f9fa] hover:text-[#202124]
+           focus:ring-primary-600;
+  }
+
+  .btn-ghost {
+    @apply text-[#5f6368]
+           hover:text-[#202124] hover:bg-[#f1f3f4]
+           focus:ring-[#5f6368];
+  }
+
+  /* ========================================
+     Inputs - Clean Material Style
+     ======================================== */
+  .input {
+    @apply block w-full px-3 py-2
+           bg-white
+           border border-[#dadce0] rounded
+           text-[#202124] placeholder-[#9aa0a6]
+           transition-colors duration-150
+           focus:outline-none focus:ring-2 focus:ring-primary-600/20 focus:border-primary-600
+           hover:border-[#5f6368];
+  }
+
+  /* ========================================
+     Cards - Simple White with Border
+     ======================================== */
+  .card {
+    @apply bg-white
+           rounded-lg
+           border border-[#dadce0]
+           shadow-elevation-1
+           transition-shadow duration-150;
+  }
+
+  .card:hover {
+    @apply shadow-elevation-2;
+  }
+
+  /* ========================================
+     Chat Bubbles - Simple Style
+     ======================================== */
+  .chat-bubble {
+    @apply px-4 py-3 rounded-lg max-w-[80%];
+  }
+
+  .chat-bubble-assistant {
+    @apply bg-[#f1f3f4] text-[#202124];
+  }
+
+  .chat-bubble-user {
+    @apply bg-primary-600 text-white;
+  }
+
+  /* ========================================
+     Quick Reply Buttons
+     ======================================== */
+  .quick-reply-btn {
+    @apply px-3 py-1.5
+           bg-white
+           border border-[#dadce0]
+           text-[#5f6368]
+           rounded-full
+           text-sm
+           transition-colors duration-150
+           hover:bg-[#f1f3f4] hover:text-[#202124] hover:border-[#5f6368];
+  }
+
+  /* ========================================
+     Badge / Tag styles
+     ======================================== */
+  .badge {
+    @apply inline-flex items-center px-2 py-0.5
+           rounded text-xs font-medium;
+  }
+
+  .badge-primary {
+    @apply bg-primary-50 text-primary-700;
+  }
+
+  .badge-success {
+    @apply bg-green-50 text-[#1e8e3e];
+  }
+
+  .badge-warning {
+    @apply bg-yellow-50 text-[#f9ab00];
+  }
+
+  .badge-danger {
+    @apply bg-red-50 text-[#d93025];
+  }
+
+  /* ========================================
+     Header styles - Simple white
+     ======================================== */
+  .header {
+    @apply bg-white border-b border-[#dadce0];
+  }
+
+  /* ========================================
+     Loading spinner
+     ======================================== */
+  .spinner {
+    @apply animate-spin rounded-full border-2 border-[#dadce0] border-t-primary-600;
+  }
+
+  /* ========================================
+     Modal overlay
+     ======================================== */
+  .modal-overlay {
+    @apply fixed inset-0 bg-black/50
+           flex items-center justify-center z-50
+           animate-fade-in;
+  }
+
+  .modal-content {
+    @apply bg-white rounded-lg shadow-elevation-4 p-6 max-w-md mx-4
+           animate-slide-up;
+  }
+}
+
+/* ========================================
+   Markdown styling for chat messages
+   ======================================== */
+.markdown-content {
+  @apply leading-relaxed;
+}
+
+.markdown-content p {
+  @apply mb-3 last:mb-0;
+}
+
+.markdown-content ul,
+.markdown-content ol {
+  @apply ml-5 mb-3 space-y-1;
+}
+
+.markdown-content ul {
+  @apply list-disc;
+}
+
+.markdown-content ol {
+  @apply list-decimal;
+}
+
+.markdown-content li {
+  @apply mb-1.5;
+}
+
+.markdown-content strong {
+  @apply font-semibold;
+}
+
+.markdown-content code {
+  @apply bg-[#f1f3f4] px-1.5 py-0.5 rounded text-sm font-mono text-primary-700;
+}
+
+.markdown-content pre {
+  @apply bg-[#202124] text-gray-100 p-4 rounded-lg overflow-x-auto mb-3;
+}
+
+.markdown-content pre code {
+  @apply bg-transparent p-0 text-inherit;
+}
+
+.markdown-content blockquote {
+  @apply border-l-4 border-primary-600 pl-4 italic text-[#5f6368] mb-3;
+}
+
+.markdown-content h1,
+.markdown-content h2,
+.markdown-content h3 {
+  @apply font-semibold mt-4 mb-2;
+}
+
+.markdown-content h1 {
+  @apply text-xl;
+}
+
+.markdown-content h2 {
+  @apply text-lg;
+}
+
+.markdown-content h3 {
+  @apply text-base;
+}
+
+/* ========================================
+   Typing indicator animation
+   ======================================== */
+.typing-indicator {
+  @apply flex gap-1 items-center py-1;
+}
+
+.typing-indicator span {
+  @apply w-2 h-2 bg-[#9aa0a6] rounded-full;
+  animation: typing-bounce 1.4s ease-in-out infinite;
+}
+
+.typing-indicator span:nth-child(2) {
+  animation-delay: 0.2s;
+}
+
+.typing-indicator span:nth-child(3) {
+  animation-delay: 0.4s;
+}
+
+@keyframes typing-bounce {
+  0%, 60%, 100% {
+    transform: translateY(0);
+  }
+  30% {
+    transform: translateY(-6px);
+  }
+}
+
+/* ========================================
+   Scrollbar styling
+   ======================================== */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  @apply bg-[#f1f3f4] rounded-full;
+}
+
+::-webkit-scrollbar-thumb {
+  @apply bg-[#dadce0] rounded-full transition-colors;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  @apply bg-[#9aa0a6];
+}
+
+/* ========================================
+   Prose overrides for articles
+   ======================================== */
+.prose h2 {
+  @apply text-lg font-semibold text-[#202124] mt-6 mb-3 pb-2 border-b border-[#dadce0];
+}
+
+.prose p {
+  @apply text-[#5f6368] leading-relaxed mb-4;
+}
+
+.prose blockquote {
+  @apply border-l-4 border-primary-600 pl-4 italic my-4;
+}
+
+/* ========================================
+   Page transitions
+   ======================================== */
+.page-enter {
+  @apply animate-fade-in;
+}

@@ -1,0 +1,20 @@
+{
+  "name": "interview-ai-migration",
+  "version": "1.0.0",
+  "description": "Migration scripts for interview-ai multi-tenant architecture",
+  "scripts": {
+    "migrate:dry-run": "ts-node migrate-to-multitenant.ts --dry-run",
+    "migrate:live": "ts-node migrate-to-multitenant.ts",
+    "verify": "ts-node verify-migration.ts"
+  },
+  "dependencies": {
+    "firebase-admin": "^12.0.0",
+    "uuid": "^9.0.0"
+  },
+  "devDependencies": {
+    "@types/node": "^20.0.0",
+    "@types/uuid": "^9.0.0",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.0.0"
+  }
+}

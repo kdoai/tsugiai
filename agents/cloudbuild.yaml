@@ -1,0 +1,56 @@
+steps:
+  # Build the container image
+  - name: 'gcr.io/cloud-builders/docker'
+    args:
+      - 'build'
+      - '-t'
+      - 'asia-northeast1-docker.pkg.dev/${PROJECT_ID}/handover-api/handover-backend:${SHORT_SHA}'
+      - '-t'
+      - 'asia-northeast1-docker.pkg.dev/${PROJECT_ID}/handover-api/handover-backend:latest'
+      - '.'
+    dir: 'agents'
+
+  # Push the container image to Artifact Registry
+  - name: 'gcr.io/cloud-builders/docker'
+    args:
+      - 'push'
+      - 'asia-northeast1-docker.pkg.dev/${PROJECT_ID}/handover-api/handover-backend:${SHORT_SHA}'
+    dir: 'agents'
+
+  - name: 'gcr.io/cloud-builders/docker'
+    args:
+      - 'push'
+      - 'asia-northeast1-docker.pkg.dev/${PROJECT_ID}/handover-api/handover-backend:latest'
+    dir: 'agents'
+
+  # Deploy to Cloud Run
+  - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
+    entrypoint: gcloud
+    args:
+      - 'run'
+      - 'deploy'
+      - 'handover-api'
+      - '--image'
+      - 'asia-northeast1-docker.pkg.dev/${PROJECT_ID}/handover-api/handover-backend:${SHORT_SHA}'
+      - '--region'
+      - 'asia-northeast1'
+      - '--platform'
+      - 'managed'
+      - '--allow-unauthenticated'
+      - '--memory'
+      - '1Gi'
+      - '--cpu'
+      - '1'
+      - '--timeout'
+      - '300'
+      - '--set-env-vars'
+      - 'GOOGLE_CLOUD_PROJECT=${PROJECT_ID},STORAGE_BUCKET=${PROJECT_ID}-handover-attachments'
+      - '--set-secrets'
+      - 'GOOGLE_CLOUD_API_KEY=GOOGLE_CLOUD_API_KEY:latest'
+
+options:
+  logging: CLOUD_LOGGING_ONLY
+
+images:
+  - 'asia-northeast1-docker.pkg.dev/${PROJECT_ID}/handover-api/handover-backend:${SHORT_SHA}'
+  - 'asia-northeast1-docker.pkg.dev/${PROJECT_ID}/handover-api/handover-backend:latest'

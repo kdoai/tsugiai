@@ -1,0 +1,73 @@
+steps:
+  # Build the backend Docker image
+  - name: 'gcr.io/cloud-builders/docker'
+    args:
+      - 'build'
+      - '-t'
+      - 'gcr.io/$PROJECT_ID/interview-ai-backend:$COMMIT_SHA'
+      - '-t'
+      - 'gcr.io/$PROJECT_ID/interview-ai-backend:latest'
+      - './backend'
+
+  # Push the backend image to Container Registry
+  - name: 'gcr.io/cloud-builders/docker'
+    args:
+      - 'push'
+      - 'gcr.io/$PROJECT_ID/interview-ai-backend:$COMMIT_SHA'
+
+  - name: 'gcr.io/cloud-builders/docker'
+    args:
+      - 'push'
+      - 'gcr.io/$PROJECT_ID/interview-ai-backend:latest'
+
+  # Deploy backend to Cloud Run
+  - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
+    entrypoint: gcloud
+    args:
+      - 'run'
+      - 'deploy'
+      - 'interview-ai-backend'
+      - '--image'
+      - 'gcr.io/$PROJECT_ID/interview-ai-backend:$COMMIT_SHA'
+      - '--region'
+      - 'asia-northeast1'
+      - '--platform'
+      - 'managed'
+      - '--allow-unauthenticated'
+      - '--memory'
+      - '1Gi'
+      - '--timeout'
+      - '300s'
+      - '--set-env-vars'
+      - 'NODE_ENV=production,GOOGLE_CLOUD_PROJECT=$PROJECT_ID'
+
+  # Build frontend
+  - name: 'node:20'
+    dir: 'frontend'
+    entrypoint: npm
+    args: ['ci']
+
+  - name: 'node:20'
+    dir: 'frontend'
+    entrypoint: npm
+    args: ['run', 'build']
+    env:
+      - 'VITE_API_URL=https://interview-ai-backend-xxxxx-an.a.run.app'
+
+  # Deploy frontend to Firebase Hosting
+  - name: 'gcr.io/$PROJECT_ID/firebase'
+    args:
+      - 'deploy'
+      - '--only'
+      - 'hosting'
+      - '--project'
+      - '$PROJECT_ID'
+
+images:
+  - 'gcr.io/$PROJECT_ID/interview-ai-backend:$COMMIT_SHA'
+  - 'gcr.io/$PROJECT_ID/interview-ai-backend:latest'
+
+options:
+  logging: CLOUD_LOGGING_ONLY
+
+timeout: '1200s'

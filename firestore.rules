@@ -1,0 +1,267 @@
+rules_version = '2';
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // ==================== Helper Functions ====================
+
+    // Basic authentication check
+    function isAuthenticated() {
+      return request.auth != null;
+    }
+
+    // Get user document
+    function getUserData() {
+      return get(/databases/$(database)/documents/users/$(request.auth.uid)).data;
+    }
+
+    // Check if user exists
+    function userExists() {
+      return exists(/databases/$(database)/documents/users/$(request.auth.uid));
+    }
+
+    // Check if user is a global admin
+    function isGlobalAdmin() {
+      return isAuthenticated() && userExists() && getUserData().globalRole == 'superadmin';
+    }
+
+    // Legacy admin check (for backward compatibility)
+    function isLegacyAdmin() {
+      return isAuthenticated() &&
+             (exists(/databases/$(database)/documents/admins/$(request.auth.uid)) ||
+              (userExists() && getUserData().role == 'admin'));
+    }
+
+    // ==================== Tenant Helper Functions ====================
+
+    // Get tenant member document
+    function getTenantMember(tenantId) {
+      return get(/databases/$(database)/documents/tenants/$(tenantId)/members/$(request.auth.uid)).data;
+    }
+
+    // Check if user is a member of a tenant
+    function isTenantMember(tenantId) {
+      return isAuthenticated() &&
+             exists(/databases/$(database)/documents/tenants/$(tenantId)/members/$(request.auth.uid)) &&
+             getTenantMember(tenantId).status == 'active';
+    }
+
+    // Check if user is tenant admin (owner or admin role)
+    function isTenantAdmin(tenantId) {
+      return isTenantMember(tenantId) &&
+             getTenantMember(tenantId).role in ['owner', 'admin'];
+    }
+
+    // Check if user is tenant owner
+    function isTenantOwner(tenantId) {
+      return isTenantMember(tenantId) &&
+             getTenantMember(tenantId).role == 'owner';
+    }
+
+    // Check if user can view data (member, user, or viewer role)
+    function canViewTenantData(tenantId) {
+      return isTenantMember(tenantId) &&
+             getTenantMember(tenantId).role in ['owner', 'admin', 'user', 'viewer'];
+    }
+
+    // Check if user can edit data (owner, admin, or user role)
+    function canEditTenantData(tenantId) {
+      return isTenantMember(tenantId) &&
+             getTenantMember(tenantId).role in ['owner', 'admin', 'user'];
+    }
+
+    // ==================== Global Collections ====================
+
+    // Users collection - global user records
+    match /users/{userId} {
+      // Users can read their own document
+      allow read: if isAuthenticated() && request.auth.uid == userId;
+      // Users can create their own document during signup
+      allow create: if isAuthenticated() && request.auth.uid == userId;
+      // Users can update their own document (limited fields)
+      // Allows: displayName, photoURL, updatedAt, tenantId (for switching tenants)
+      // Allows: role change only from "pending" to "user" (self-approval for multi-tenant)
+      allow update: if isAuthenticated() && request.auth.uid == userId &&
+                       request.resource.data.diff(resource.data).affectedKeys()
+                         .hasOnly(['displayName', 'photoURL', 'updatedAt', 'tenantId', 'role']) &&
+                       // If role is changing, only allow pending -> user transition
+                       (request.resource.data.role == resource.data.role ||
+                        (resource.data.role == 'pending' && request.resource.data.role == 'user'));
+      // Global admins can read/write all user documents
+      allow read, write: if isGlobalAdmin();
+      // Legacy admin support
+      allow read, write: if isLegacyAdmin();
+    }
+
+    // Config collection - for system settings
+    match /config/{configId} {
+      // Anyone can read config (for checking if system login is enabled)
+      allow read: if true;
+      // Only global admins can write config
+      allow write: if isGlobalAdmin() || isLegacyAdmin();
+    }
+
+    // Invitations collection - for user invitations
+    match /invitations/{invitationId} {
+      // Anyone with the invitation token can read it
+      allow read: if true;
+      // Only tenant admins can create invitations (enforced via Cloud Functions)
+      allow write: if false;
+    }
+
+    // ==================== Tenant Collection ====================
+
+    match /tenants/{tenantId} {
+      // Tenant members can read their tenant info
+      allow read: if isTenantMember(tenantId);
+      // Only tenant owner can update tenant settings
+      allow update: if isTenantOwner(tenantId);
+      // Tenant creation is done via Cloud Functions
+      allow create: if false;
+      // Only global admin can delete tenants
+      allow delete: if isGlobalAdmin();
+
+      // -------------------- Members Subcollection --------------------
+      match /members/{memberId} {
+        // Members can read all members in their tenant
+        allow read: if isTenantMember(tenantId);
+        // Users can read their own membership document (for collection group queries)
+        allow read: if isAuthenticated() && resource.data.userId == request.auth.uid;
+        // Only tenant admins can add/modify members
+        allow create, update: if isTenantAdmin(tenantId);
+        // Only tenant owner can remove members (or admins for non-admin members)
+        allow delete: if isTenantOwner(tenantId) ||
+                         (isTenantAdmin(tenantId) &&
+                          get(/databases/$(database)/documents/tenants/$(tenantId)/members/$(memberId)).data.role in ['user', 'viewer']);
+      }
+
+      // -------------------- Interviews Subcollection --------------------
+      match /interviews/{interviewId} {
+        // Tenant members can read interviews
+        allow read: if canViewTenantData(tenantId);
+        // Public/internal interviews can be read by anyone (for respondents)
+        allow read: if resource.data.publishConfig.scope in ['public', 'internal'];
+        // Tenant admins can create/update/delete interviews
+        allow create, update, delete: if isTenantAdmin(tenantId);
+      }
+
+      // -------------------- Sessions Subcollection --------------------
+      match /sessions/{sessionId} {
+        // Anyone can create a session (anonymous respondents)
+        allow create: if true;
+        // Session owner (respondent) can read/update their session
+        allow read, update: if resource.data.respondentId == request.auth.uid ||
+                               resource.data.respondentId == request.resource.data.respondentId;
+        // Anonymous sessions can be read/updated by the same respondentId
+        allow read, update: if resource.data.respondentId != null &&
+                               resource.data.respondentId == request.resource.data.respondentId;
+        // Tenant members can read all sessions
+        allow read: if canViewTenantData(tenantId);
+        // Tenant admins can delete sessions
+        allow delete: if isTenantAdmin(tenantId);
+
+        // Turns subcollection
+        match /turns/{turnId} {
+          // Anyone can read/create turns (for anonymous sessions)
+          allow read, create: if true;
+          // Tenant admins can update/delete turns
+          allow update, delete: if isTenantAdmin(tenantId);
+        }
+      }
+
+      // -------------------- Summaries Subcollection --------------------
+      match /summaries/{summaryId} {
+        // Anyone can read summaries (for respondents to confirm)
+        allow read: if true;
+        // Only system (via backend) can create/update summaries
+        // Tenant admins can manage summaries
+        allow create, update: if isTenantAdmin(tenantId);
+        allow delete: if isTenantAdmin(tenantId);
+      }
+
+      // -------------------- Reports Subcollection --------------------
+      match /reports/{reportId} {
+        // Tenant members can read reports
+        allow read: if canViewTenantData(tenantId);
+        // Public reports can be read by anyone
+        allow read: if resource.data.isPublic == true;
+        // Tenant admins can create/update/delete reports
+        allow create, update, delete: if isTenantAdmin(tenantId);
+      }
+
+      // -------------------- Tenant Config Subcollection --------------------
+      match /config/{configId} {
+        // Tenant members can read config
+        allow read: if canViewTenantData(tenantId);
+        // Only tenant owner can update config
+        allow write: if isTenantOwner(tenantId);
+      }
+
+      // -------------------- Inbox Subcollection --------------------
+      match /inbox/{inboxId} {
+        // Users can read their own inbox items
+        allow read: if isAuthenticated() && resource.data.user_id == request.auth.uid;
+        // Users can update their own inbox items (mark read/delete)
+        allow update: if isAuthenticated() && resource.data.user_id == request.auth.uid;
+        // Inbox items are created via backend (server-side)
+        allow create: if false;
+        // Users can delete their own inbox items
+        allow delete: if isAuthenticated() && resource.data.user_id == request.auth.uid;
+      }
+    }
+
+    // ==================== Collection Group Rules ====================
+
+    // Allow users to query their own membership across all tenants
+    match /{path=**}/members/{memberId} {
+      allow read: if request.auth != null && resource.data.userId == request.auth.uid;
+    }
+
+    // ==================== Legacy Collections (for backward compatibility) ====================
+    // These will be migrated to tenant subcollections
+
+    // Legacy interviews collection
+    match /interviews/{interviewId} {
+      // Anyone can read public interviews
+      allow read: if resource.data.publishConfig.scope == 'public' ||
+                     resource.data.publishConfig.scope == 'internal';
+      // Legacy admin check
+      allow create, update, delete: if isLegacyAdmin();
+      allow read: if isLegacyAdmin();
+    }
+
+    // Legacy sessions collection
+    match /sessions/{sessionId} {
+      // Anyone can create a session (anonymous access)
+      allow create: if true;
+      // Session owner can read and update their own session
+      allow read, update: if resource.data.respondentId == request.resource.data.respondentId ||
+                             isLegacyAdmin();
+      // Legacy admins can read all sessions
+      allow read: if isLegacyAdmin();
+      // Turns subcollection
+      match /turns/{turnId} {
+        allow read, create: if true;
+        allow update, delete: if isLegacyAdmin();
+      }
+    }
+
+    // Legacy summaries collection
+    match /summaries/{summaryId} {
+      allow read: if true;
+      allow create, update: if isLegacyAdmin();
+    }
+
+    // Legacy reports collection
+    match /reports/{reportId} {
+      allow read, write: if isLegacyAdmin();
+      allow read: if resource.data.isPublic == true;
+    }
+
+    // Legacy admins collection
+    match /admins/{userId} {
+      allow read: if isAuthenticated() && request.auth.uid == userId;
+      allow write: if false;
+    }
+  }
+}

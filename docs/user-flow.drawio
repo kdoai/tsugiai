@@ -1,0 +1,233 @@
+<mxfile host="app.diagrams.net" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/144.0.0.0 Safari/537.36 Edg/144.0.0.0" version="29.3.7">
+  <diagram name="User Flow" id="tsugiai-userflow">
+    <mxGraphModel dx="1556" dy="1012" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1400" pageHeight="900" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="title" parent="1" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=24;fontStyle=1;fontColor=#202124;" value="TSUGIAI - ユーザーフロー" vertex="1">
+          <mxGeometry height="40" width="360" x="520" y="20" as="geometry" />
+        </mxCell>
+        <mxCell id="template-section" parent="1" style="swimlane;fontStyle=1;horizontal=1;startSize=30;fillColor=#E8F5E9;strokeColor=#43A047;fontSize=14;swimlaneFillColor=#F1F8E9;" value="1. チェックリストテンプレート作成フロー" vertex="1">
+          <mxGeometry height="350" width="400" x="40" y="80" as="geometry" />
+        </mxCell>
+        <mxCell id="t-start" parent="template-section" style="ellipse;whiteSpace=wrap;html=1;fillColor=#C8E6C9;strokeColor=#43A047;fontSize=11;" value="開始" vertex="1">
+          <mxGeometry height="30" width="60" x="170" y="45" as="geometry" />
+        </mxCell>
+        <mxCell id="t-list" parent="template-section" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#43A047;fontSize=11;" value="テンプレート一覧&#xa;(/templates)" vertex="1">
+          <mxGeometry height="40" width="120" x="140" y="90" as="geometry" />
+        </mxCell>
+        <mxCell id="t-decision1" parent="template-section" style="rhombus;whiteSpace=wrap;html=1;fillColor=#FFF9C4;strokeColor=#F9A825;fontSize=10;" value="新規作成？" vertex="1">
+          <mxGeometry height="50" width="100" x="150" y="145" as="geometry" />
+        </mxCell>
+        <mxCell id="t-new" parent="template-section" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#43A047;fontSize=11;" value="新規作成ページ&#xa;(/templates/new)" vertex="1">
+          <mxGeometry height="40" width="120" x="20" y="210" as="geometry" />
+        </mxCell>
+        <mxCell id="t-edit" parent="template-section" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#43A047;fontSize=11;" value="編集ページ&#xa;(/templates/:id/edit)" vertex="1">
+          <mxGeometry height="40" width="120" x="260" y="210" as="geometry" />
+        </mxCell>
+        <mxCell id="t-input-decision" parent="template-section" style="rhombus;whiteSpace=wrap;html=1;fillColor=#FFF9C4;strokeColor=#F9A825;fontSize=10;" value="入力方法" vertex="1">
+          <mxGeometry height="50" width="100" x="30" y="265" as="geometry" />
+        </mxCell>
+        <mxCell id="t-ai-chat" parent="template-section" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#E3F2FD;strokeColor=#1976D2;fontSize=10;" value="AI対話で生成&#xa;(業種・職種を入力)" vertex="1">
+          <mxGeometry height="40" width="100" x="160" y="250" as="geometry" />
+        </mxCell>
+        <mxCell id="t-file" parent="template-section" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FCE4EC;strokeColor=#C2185B;fontSize=10;" value="ファイル分析&#xa;(PDF/画像)" vertex="1">
+          <mxGeometry height="40" width="100" x="160" y="300" as="geometry" />
+        </mxCell>
+        <mxCell id="t-arrow1" edge="1" parent="template-section" source="t-start" style="endArrow=classic;html=1;strokeColor=#43A047;" target="t-list">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="t-arrow2" edge="1" parent="template-section" source="t-list" style="endArrow=classic;html=1;strokeColor=#43A047;" target="t-decision1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="t-arrow3" edge="1" parent="template-section" source="t-decision1" style="endArrow=classic;html=1;strokeColor=#43A047;fontSize=9;" target="t-new" value="Yes">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="t-arrow4" edge="1" parent="template-section" source="t-decision1" style="endArrow=classic;html=1;strokeColor=#43A047;fontSize=9;" target="t-edit" value="No">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="t-arrow5" edge="1" parent="template-section" source="t-new" style="endArrow=classic;html=1;strokeColor=#43A047;" target="t-input-decision">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="t-arrow6" edge="1" parent="template-section" source="t-input-decision" style="endArrow=classic;html=1;strokeColor=#1976D2;fontSize=9;" target="t-ai-chat" value="対話">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="C3JInrTtboRPmp1OcNnY-1" edge="1" parent="template-section" source="t-input-decision" style="endArrow=classic;html=1;strokeColor=#1976D2;fontSize=9;entryX=-0.031;entryY=0.464;entryDx=0;entryDy=0;entryPerimeter=0;" target="t-file" value="ファイル">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="158" y="364" as="sourcePoint" />
+            <mxPoint x="200" y="358" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="checkout-section" parent="1" style="swimlane;fontStyle=1;horizontal=1;startSize=30;fillColor=#E3F2FD;strokeColor=#1976D2;fontSize=14;swimlaneFillColor=#E8F4FD;" value="2. チェックアウトフロー (Phase 1-4)" vertex="1">
+          <mxGeometry height="520" width="520" x="460" y="80" as="geometry" />
+        </mxCell>
+        <mxCell id="c-start" parent="checkout-section" style="ellipse;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;fontSize=10;" value="テンプレート選択&#xa;「使用する」クリック" vertex="1">
+          <mxGeometry height="45" width="110" x="210" y="45" as="geometry" />
+        </mxCell>
+        <mxCell id="phase1-box" parent="checkout-section" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFF8E1;strokeColor=#F57C00;strokeWidth=2;" value="" vertex="1">
+          <mxGeometry height="130" width="220" x="20" y="110" as="geometry" />
+        </mxCell>
+        <mxCell id="phase1-title" parent="checkout-section" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=12;fontStyle=1;fontColor=#E65100;" value="Phase 1: フォーム入力" vertex="1">
+          <mxGeometry height="20" width="160" x="50" y="115" as="geometry" />
+        </mxCell>
+        <mxCell id="p1-担当者" parent="checkout-section" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#F57C00;fontSize=10;" value="担当者名入力" vertex="1">
+          <mxGeometry height="25" width="90" x="35" y="140" as="geometry" />
+        </mxCell>
+        <mxCell id="p1-エリア" parent="checkout-section" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#F57C00;fontSize=10;" value="担当エリア選択" vertex="1">
+          <mxGeometry height="25" width="90" x="135" y="140" as="geometry" />
+        </mxCell>
+        <mxCell id="p1-checklist" parent="checkout-section" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#F57C00;fontSize=10;" value="チェック項目 OK/NG 入力&#xa;(ランダム順序表示)" vertex="1">
+          <mxGeometry height="30" width="190" x="35" y="172" as="geometry" />
+        </mxCell>
+        <mxCell id="p1-warning" parent="checkout-section" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFEBEE;strokeColor=#D32F2F;fontSize=9;" value="⚠️ NG項目・トラップ項目&#xa;で警告ダイアログ表示" vertex="1">
+          <mxGeometry height="25" width="190" x="35" y="209" as="geometry" />
+        </mxCell>
+        <mxCell id="phase2-box" parent="checkout-section" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#E8F5E9;strokeColor=#43A047;strokeWidth=2;" value="" vertex="1">
+          <mxGeometry height="130" width="220" x="280" y="110" as="geometry" />
+        </mxCell>
+        <mxCell id="phase2-title" parent="checkout-section" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=12;fontStyle=1;fontColor=#2E7D32;" value="Phase 2: 写真撮影・画像分析" vertex="1">
+          <mxGeometry height="20" width="190" x="290" y="115" as="geometry" />
+        </mxCell>
+        <mxCell id="p2-ai-review" parent="checkout-section" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#43A047;fontSize=10;" value="写真をアップロード" vertex="1">
+          <mxGeometry height="25" width="190" x="295" y="140" as="geometry" />
+        </mxCell>
+        <mxCell id="p2-deep" parent="checkout-section" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#43A047;fontSize=10;" value="AIエージェントが写真を分析" vertex="1">
+          <mxGeometry height="30" width="190" x="295" y="170" as="geometry" />
+        </mxCell>
+        <mxCell id="p2-parking" parent="checkout-section" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#43A047;fontSize=10;" value="OK／NGを判定する" vertex="1">
+          <mxGeometry height="25" width="190" x="295" y="205" as="geometry" />
+        </mxCell>
+        <mxCell id="phase3-box" parent="checkout-section" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#EDE7F6;strokeColor=#5E35B1;strokeWidth=2;" value="" vertex="1">
+          <mxGeometry height="120" width="220" x="20" y="281" as="geometry" />
+        </mxCell>
+        <mxCell id="phase3-title" parent="checkout-section" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=12;fontStyle=1;fontColor=#4527A0;" value="Phase 3: AI対話（音声/チャット）" vertex="1">
+          <mxGeometry height="20" width="200" x="30" y="286" as="geometry" />
+        </mxCell>
+        <mxCell id="p3-live" parent="checkout-section" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#5E35B1;fontSize=10;" value="AI が NG 項目を順に確認" vertex="1">
+          <mxGeometry height="20" width="190" x="35" y="311" as="geometry" />
+        </mxCell>
+        <mxCell id="p3-hands" parent="checkout-section" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#5E35B1;fontSize=10;" value="危険キーワード検出時&lt;br&gt;→ 自動深掘り質問 (2-3回)" vertex="1">
+          <mxGeometry height="30" width="190" x="35" y="336" as="geometry" />
+        </mxCell>
+        <mxCell id="phase4-box" parent="checkout-section" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FCE4EC;strokeColor=#C2185B;strokeWidth=2;" value="" vertex="1">
+          <mxGeometry height="120" width="220" x="280" y="281" as="geometry" />
+        </mxCell>
+        <mxCell id="phase4-title" parent="checkout-section" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=12;fontStyle=1;fontColor=#AD1457;" value="Phase 4: 確認・完了" vertex="1">
+          <mxGeometry height="20" width="160" x="310" y="286" as="geometry" />
+        </mxCell>
+        <mxCell id="p4-summary" parent="checkout-section" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#C2185B;fontSize=10;" value="入力内容サマリー表示" vertex="1">
+          <mxGeometry height="25" width="190" x="295" y="311" as="geometry" />
+        </mxCell>
+        <mxCell id="p4-confirm" parent="checkout-section" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#C2185B;fontSize=10;" value="確認 → 完了ボタン" vertex="1">
+          <mxGeometry height="25" width="190" x="295" y="341" as="geometry" />
+        </mxCell>
+        <mxCell id="p4-handover" parent="checkout-section" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#C2185B;fontSize=10;" value="引継ぎドキュメント自動生成" vertex="1">
+          <mxGeometry height="25" width="190" x="295" y="371" as="geometry" />
+        </mxCell>
+        <mxCell id="c-end" parent="checkout-section" style="ellipse;whiteSpace=wrap;html=1;fillColor=#C8E6C9;strokeColor=#43A047;fontSize=11;" value="完了" vertex="1">
+          <mxGeometry height="30" width="60" x="360" y="421" as="geometry" />
+        </mxCell>
+        <mxCell id="c-arrow1" edge="1" parent="checkout-section" source="c-start" style="endArrow=classic;html=1;strokeColor=#1976D2;strokeWidth=2;" target="phase1-box">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="200" y="100" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="c-arrow2" edge="1" parent="checkout-section" source="phase1-box" style="endArrow=classic;html=1;strokeColor=#1976D2;strokeWidth=2;" target="phase2-box">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="c-arrow4" edge="1" parent="checkout-section" source="phase3-box" style="endArrow=classic;html=1;strokeColor=#1976D2;strokeWidth=2;" target="phase4-box">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="c-arrow4b" edge="1" parent="checkout-section" style="endArrow=classic;html=1;strokeColor=#1976D2;strokeWidth=2;">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="390" y="240" as="sourcePoint" />
+            <mxPoint x="130" y="280" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="c-arrow5" edge="1" parent="checkout-section" source="phase4-box" style="endArrow=classic;html=1;strokeColor=#1976D2;strokeWidth=2;" target="c-end">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="c-skip-arrow" edge="1" parent="checkout-section" source="phase1-box" style="endArrow=classic;html=1;strokeColor=#9E9E9E;dashed=1;fontSize=9;exitX=0.986;exitY=0.584;exitDx=0;exitDy=0;exitPerimeter=0;" value="スキップ">
+          <mxGeometry relative="1" x="-0.4522" as="geometry">
+            <mxPoint as="offset" />
+            <Array as="points">
+              <mxPoint x="260" y="190" />
+              <mxPoint x="260" y="240" />
+            </Array>
+            <mxPoint x="390" y="240" as="sourcePoint" />
+            <mxPoint x="140" y="280" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="inoYgHxkcDEz5WCZtY9M-1" parent="checkout-section" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=light-dark(#5E35B1,#419145);fontSize=10;" value="必要に応じでやり直しを提案" vertex="1">
+          <mxGeometry height="25" width="190" x="35" y="371" as="geometry" />
+        </mxCell>
+        <mxCell id="handover-section" parent="1" style="swimlane;fontStyle=1;horizontal=1;startSize=30;fillColor=#FCE4EC;strokeColor=#C2185B;fontSize=14;swimlaneFillColor=#FFF0F3;" value="3. 引継ぎ確認フロー" vertex="1">
+          <mxGeometry height="520" width="360" x="1000" y="80" as="geometry" />
+        </mxCell>
+        <mxCell id="h-start" parent="handover-section" style="ellipse;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;fontSize=10;" value="引継ぎ一覧&lt;br&gt;(/handovers)" vertex="1">
+          <mxGeometry height="45" width="100" x="130" y="45" as="geometry" />
+        </mxCell>
+        <mxCell id="h-select" parent="handover-section" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#C2185B;fontSize=11;" value="引継ぎドキュメント選択" vertex="1">
+          <mxGeometry height="35" width="140" x="110" y="110" as="geometry" />
+        </mxCell>
+        <mxCell id="h-detail" parent="handover-section" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#C2185B;fontSize=11;" value="詳細表示&#xa;(/handovers/:id)" vertex="1">
+          <mxGeometry height="40" width="140" x="110" y="165" as="geometry" />
+        </mxCell>
+        <mxCell id="h-actions" parent="handover-section" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#E8F5E9;strokeColor=#43A047;fontSize=10;" value="アクションアイテム確認&#xa;(自動抽出済み)" vertex="1">
+          <mxGeometry height="40" width="130" x="20" y="225" as="geometry" />
+        </mxCell>
+        <mxCell id="h-comments" parent="handover-section" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#E3F2FD;strokeColor=#1976D2;fontSize=10;" value="コメント追加&#xa;(後任者→前任者)" vertex="1">
+          <mxGeometry height="40" width="130" x="200" y="225" as="geometry" />
+        </mxCell>
+        <mxCell id="h-feedback" parent="handover-section" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFF3E0;strokeColor=#E65100;fontSize=10;" value="フィードバックループ&#xa;(双方向コミュニケーション)" vertex="1">
+          <mxGeometry height="40" width="140" x="110" y="285" as="geometry" />
+        </mxCell>
+        <mxCell id="h-arrow1" edge="1" parent="handover-section" source="h-start" style="endArrow=classic;html=1;strokeColor=#C2185B;" target="h-select">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="h-arrow2" edge="1" parent="handover-section" source="h-select" style="endArrow=classic;html=1;strokeColor=#C2185B;" target="h-detail">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="h-arrow3" edge="1" parent="handover-section" source="h-detail" style="endArrow=classic;html=1;strokeColor=#C2185B;" target="h-actions">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="h-arrow4" edge="1" parent="handover-section" source="h-detail" style="endArrow=classic;html=1;strokeColor=#C2185B;" target="h-comments">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="h-arrow5" edge="1" parent="handover-section" source="h-actions" style="endArrow=classic;html=1;strokeColor=#C2185B;" target="h-feedback">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="h-arrow6" edge="1" parent="handover-section" source="h-comments" style="endArrow=classic;html=1;strokeColor=#C2185B;" target="h-feedback">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="legend" parent="1" style="swimlane;fontStyle=1;horizontal=1;startSize=25;fillColor=#F5F5F5;strokeColor=#9E9E9E;fontSize=12;" value="凡例" vertex="1">
+          <mxGeometry height="160" width="400" x="40" y="440" as="geometry" />
+        </mxCell>
+        <mxCell id="legend-start" parent="legend" style="ellipse;whiteSpace=wrap;html=1;fillColor=#C8E6C9;strokeColor=#43A047;fontSize=10;" value="開始/終了" vertex="1">
+          <mxGeometry height="25" width="70" x="80" y="35" as="geometry" />
+        </mxCell>
+        <mxCell id="legend-process" parent="legend" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#1976D2;fontSize=10;" value="処理/画面" vertex="1">
+          <mxGeometry height="25" width="70" x="170" y="35" as="geometry" />
+        </mxCell>
+        <mxCell id="legend-decision" parent="legend" style="rhombus;whiteSpace=wrap;html=1;fillColor=#FFF9C4;strokeColor=#F9A825;fontSize=10;" value="分岐" vertex="1">
+          <mxGeometry height="35" width="60" x="260" y="30" as="geometry" />
+        </mxCell>
+        <mxCell id="legend-phase" parent="legend" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=11;fontStyle=1;" value="Phase 色分け:" vertex="1">
+          <mxGeometry height="20" width="100" x="20" y="93" as="geometry" />
+        </mxCell>
+        <mxCell id="legend-p1" parent="legend" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFF8E1;strokeColor=#F57C00;fontSize=9;" value="Phase 1" vertex="1">
+          <mxGeometry height="20" width="60" x="20" y="118" as="geometry" />
+        </mxCell>
+        <mxCell id="legend-p2" parent="legend" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#E8F5E9;strokeColor=#43A047;fontSize=9;" value="Phase 2" vertex="1">
+          <mxGeometry height="20" width="60" x="90" y="118" as="geometry" />
+        </mxCell>
+        <mxCell id="legend-p3" parent="legend" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#EDE7F6;strokeColor=#5E35B1;fontSize=9;" value="Phase 3" vertex="1">
+          <mxGeometry height="20" width="60" x="160" y="118" as="geometry" />
+        </mxCell>
+        <mxCell id="legend-p4" parent="legend" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FCE4EC;strokeColor=#C2185B;fontSize=9;" value="Phase 4" vertex="1">
+          <mxGeometry height="20" width="60" x="230" y="118" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

@@ -72,7 +72,7 @@ TSUGIAI is an AI-driven handover checklist system designed for shift-based indus
 | **Gemini 3 Flash Preview** | チェックアウトテキスト対話・テンプレート生成・引き継ぎドキュメント生成・**ファイル分析** | REST（Google ADK + Function Calling） | Temperature 0.3〜0.8 / Top P 0.95 |
 
 - **テキスト対話** では Google ADK（Agent Development Kit）を通じて Gemini を呼び出し、Function Calling によるツール実行を組み合わせたエージェント構成
-- **音声対話** では Gemini Live API の `BidiGenerateContent` を WebSocket で直接呼び出し、STT・LLM・TTS をすべて Gemini 内部でネイティブ処理。従来の REST ベース（Google Cloud Speech API → Gemini → Cloud TTS）と比較して **レイテンシを実現**
+- **音声対話** では Gemini Live API の `BidiGenerateContent` を WebSocket で直接呼び出し、STT・LLM・TTS をすべて Gemini 内部でネイティブ処理。従来の REST ベース（Google Cloud Speech API → Gemini → Cloud TTS）と比較して **低レイテンシを実現**
 - **ファイル分析** では Gemini のマルチモーダル機能を使用し、PDF・画像ファイルから既存のチェックリストを読み取ってテンプレートを自動生成
 
 ### 3 つの AI エージェント

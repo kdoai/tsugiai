@@ -2,7 +2,7 @@
 
 >  **AIエージェントを活用した業務引き継ぎチェックリスト＆チェックアウトシステム**
 >
-> AI-powered work handover checklist and checkout system built with Google ADK + Gemini3.0
+> AI-powered work handover checklist and checkout system built with Google ADK + Gemini 3 Flash Preview
 
 ---
 
@@ -72,7 +72,7 @@ TSUGIAI is an AI-driven handover checklist system designed for shift-based indus
 | **Gemini 3 Flash Preview** | チェックアウトテキスト対話・テンプレート生成・引き継ぎドキュメント生成・**ファイル分析** | REST（Google ADK + Function Calling） | Temperature 0.3〜0.8 / Top P 0.95 |
 
 - **テキスト対話** では Google ADK（Agent Development Kit）を通じて Gemini を呼び出し、Function Calling によるツール実行を組み合わせたエージェント構成
-- **音声対話** では Gemini Live API の `BidiGenerateContent` を WebSocket で直接呼び出し、STT・LLM・TTS をすべて Gemini 内部でネイティブ処理。従来の REST ベース（Google Cloud Speech API → Gemini → Cloud TTS）と比較して **低レイテンシを実現**
+- **音声対話** では Gemini Live API の `BidiGenerateContent` を WebSocket で直接呼び出し、STT・LLM・TTS をすべて Gemini 内部でネイティブ処理。従来の REST ベース（Google Cloud Speech API → Gemini → Cloud TTS）と比較して低レイテンシを実現
 - **ファイル分析** では Gemini のマルチモーダル機能を使用し、PDF・画像ファイルから既存のチェックリストを読み取ってテンプレートを自動生成
 
 ### 3 つの AI エージェント
@@ -122,7 +122,7 @@ TSUGIAI is an AI-driven handover checklist system designed for shift-based indus
 業種・職種を対話で聞き取り、最適なチェックリストテンプレートを自動生成します。
 
 - 2〜3 の質問で業種を特定し、製造業・小売・オフィス・医療等のプリセットを提案
-- チェックボックス / 数値入力 / テキスト / 選択肢 / 写真 / AI 対話確認の 6 種類のアイテムタイプに対応
+- チェックボックス / 数値入力 / テキスト / 選択肢 / 写真の 5 種類のアイテムタイプに対応
 - 数値項目には範囲・閾値・許容差のバリデーションルールを設定可能
 - **NGが正の回答**（`expected_answer: "ng"`）: 否定形の質問（「漏れはないか？」「異常はないか？」等）で OK を押すと NG 扱いにする反転設定。テンプレートビルダーで項目ごとに設定可能。この項目に OK を押して次へ進もうとすると **警告ダイアログが表示** され、Phase 3 の AI 対話で「なぜ OK と回答したか」を確認される。形骸化・惰性回答の防止に有効
 - **ランダム順序** + **固定位置**: テンプレート単位でランダム表示を有効化（`randomize_order: true`）。各項目は「ランダム」か「固定位置（1, 2, 3...）」を選択可能。Fisher-Yates シャッフルで順序を決定し、`sessionStorage` で同一セッション内は順序を保持。毎回異なる順序で表示されるため、パターン化された惰性回答を防止
@@ -157,7 +157,7 @@ TSUGIAI is an AI-driven handover checklist system designed for shift-based indus
 | 問題の重要度は担当者の主観判断 | 危険キーワード検出で客観的に問題を把握 |
 | 引き継ぎ書を手動で記述 | 対話ログから引き継ぎノート + アクションアイテムを自動生成 |
 | チェックリストは管理者が手動で設計 | 業種・職種を入力するだけで AI がテンプレートを提案 |
-| テキスト入力のみ | Gemini Live API によるリアルタイム音声対話。手が汚れている・手袋をしている製造現場でもハンズフリーで利用可能 |
+| テキスト入力のみ | Gemini Live API による低レイテンシのリアルタイム音声対話。手が汚れている・手袋をしている製造現場でもハンズフリーで利用可能 |
 | 引き継ぎ内容は紙で散逸 | Firestore に構造化データとして蓄積。検索・集計・傾向分析が可能 |
 
 ---
@@ -173,7 +173,7 @@ TSUGIAI is an AI-driven handover checklist system designed for shift-based indus
 | **NG 項目差し戻し** | Phase 3 の AI レビューで「やり忘れ・怠慢」と判定された NG 項目に対し、Phase 1 への差し戻しを提案。担当者の判断を尊重するソフトゲート設計 |
 | **NGが正の回答（トラップ質問）** | 否定形の質問（「漏れはないか？」「異常はないか？」等）で OK を押すと NG 扱いにする反転設定（`expected_answer: "ng"`）。見た目の OK/NG ボタンは変えず、内部ロジックのみ反転。**OK を押して次へ進もうとすると警告ダイアログが表示**され、「このまま進む場合、AI確認フェーズで理由を確認されます。続けますか？」と通知。Phase 3 の AI 対話で「なぜ OK と回答したのか」を確認される。形骸化・惰性回答の防止に有効 |
 | **ランダム順序 + 固定位置** | テンプレート単位で確認項目の表示順をランダム化。各項目は「ランダム」か「固定位置（1, 2, 3...）」を選択可能。Fisher-Yates シャッフル + `sessionStorage` による同一セッション内の順序保持。毎回異なる順番で表示されるため、パターン化された惰性での全 OK 回答を防止 |
-| **リアルタイム音声対話** | Gemini Live API（WebSocket）によるリアルタイム双方向音声対話。バージイン対応 |
+| **リアルタイム音声対話** | Gemini Live API（WebSocket）によるリアルタイム双方向音声対話。低レイテンシ。バージイン対応 |
 | **危険キーワード自動検出** | 「火災」「故障」「漏れ」等を検出し、AI が自動で深掘り確認 |
 | **引き継ぎドキュメント生成** | 対話結果からアクションアイテム付きの引き継ぎノートを自動作成 |
 | **写真添付・AI 判定** | 設備の状態を写真で記録し、AI が画像を分析して「OK / 要確認」を判定 |
@@ -330,7 +330,7 @@ Phase 4: 確認・完了（引き継ぎノート + アクションアイテム�
 ## ディレクトリ構成 / Project Structure
 
 ```
-interview-ai/
+tsugiai/
 ├── frontend/                # React SPA（Vite + TypeScript）
 │   ├── src/
 │   │   ├── components/      # UIコンポーネント
@@ -434,7 +434,7 @@ interview-ai/
 
 ```bash
 git clone <repository-url>
-cd interview-ai
+cd tsugiai
 ```
 
 ### 2. Firebase プロジェクトの設定

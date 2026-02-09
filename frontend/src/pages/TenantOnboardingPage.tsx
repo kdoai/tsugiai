@@ -18,7 +18,7 @@ type OnboardingTab = "create" | "join";
 export function TenantOnboardingPage() {
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
-  const { user, tenant, needsTenantSetup, refreshTenantInfo, signOut, isLoading: authLoading } = useAuth();
+  const { user, tenant, needsTenantSetup, refreshUserRole, refreshUserTenants, signOut, isLoading: authLoading } = useAuth();
 
   const [activeTab, setActiveTab] = useState<OnboardingTab>("create");
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -83,11 +83,9 @@ export function TenantOnboardingPage() {
     try {
       await createTenant(tenantName.trim());
       setSuccess("組織を作成しました");
-      await refreshTenantInfo();
-      // Short delay before redirect
-      setTimeout(() => {
-        navigate("/", { replace: true });
-      }, 1500);
+      await refreshUserRole();       // 最新のuserRecordを取得→tenantId付きでテナント情報更新
+      await refreshUserTenants();    // userTenantsリスト更新→needsTenantSetup=false
+      // useEffectが自動的に"/"へ遷移
     } catch (err: any) {
       console.error("Failed to create tenant:", err);
       setError(err.message || "組織の作成に失敗しました");
@@ -108,11 +106,9 @@ export function TenantOnboardingPage() {
     try {
       await acceptInvitation(inviteToken);
       setSuccess("組織に参加しました");
-      await refreshTenantInfo();
-      // Short delay before redirect
-      setTimeout(() => {
-        navigate("/", { replace: true });
-      }, 1500);
+      await refreshUserRole();       // 最新のuserRecordを取得→tenantId付きでテナント情報更新
+      await refreshUserTenants();    // userTenantsリスト更新→needsTenantSetup=false
+      // useEffectが自動的に"/"へ遷移
     } catch (err: any) {
       console.error("Failed to accept invitation:", err);
       setError(err.message || "招待の受諾に失敗しました");

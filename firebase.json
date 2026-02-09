@@ -18,7 +18,7 @@
     "indexes": "firestore.indexes.json"
   },
   "hosting": {
-    "site": "tsugiai",
+    "site": "tsugiaizenn004",
     "public": "frontend/dist",
     "ignore": [
       "firebase.json",

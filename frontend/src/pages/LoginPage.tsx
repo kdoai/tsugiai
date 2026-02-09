@@ -159,6 +159,10 @@ export function LoginPage() {
           <p className="text-[#5f6368] mt-2">
             AI引継ぎチェックリストシステム
           </p>
+          <p className="text-red-500 font-bold text-sm mt-3">
+            Hackathonの審査員の方へ<br />
+            「デモ用ログイン」からログインください
+          </p>
         </div>
 
         {/* Login Card */}
@@ -365,6 +369,27 @@ export function LoginPage() {
                 <h2 className="text-lg font-medium text-[#202124] text-center mb-6">
                   デモ用ログイン
                 </h2>
+
+                <div className="mb-5 p-4 bg-blue-50 border border-blue-200 rounded-lg text-sm">
+                  <p className="font-medium text-blue-800 mb-2">Hackathon審査員の方へ</p>
+                  <p className="text-blue-700 mb-2">以下のID・PWでログインしてください</p>
+                  <div className="space-y-2 text-blue-900">
+                    <div>
+                      <span className="font-medium">管理者ユーザー</span>
+                      <br />
+                      ID: <span className="font-mono select-all">testadmin@gmail.com</span>
+                      <br />
+                      PW: <span className="font-mono select-all">123456789</span>
+                    </div>
+                    <div className="border-t border-blue-200 pt-2">
+                      <span className="font-medium">一般ユーザー</span>
+                      <br />
+                      ID: <span className="font-mono select-all">testuser@gmail.com</span>
+                      <br />
+                      PW: <span className="font-mono select-all">123456789</span>
+                    </div>
+                  </div>
+                </div>
 
                 <form onSubmit={handleSystemSignIn} className="space-y-4">
                   <div>

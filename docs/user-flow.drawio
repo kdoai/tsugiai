@@ -1,13 +1,13 @@
-<mxfile host="app.diagrams.net" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/144.0.0.0 Safari/537.36 Edg/144.0.0.0" version="29.3.7">
+<mxfile host="app.diagrams.net" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/144.0.0.0 Safari/537.36 Edg/144.0.0.0" version="29.3.8">
   <diagram name="User Flow" id="tsugiai-userflow">
-    <mxGraphModel dx="1556" dy="1012" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1400" pageHeight="900" math="0" shadow="0">
+    <mxGraphModel dx="1111" dy="723" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1400" pageHeight="900" math="0" shadow="0">
       <root>
         <mxCell id="0" />
         <mxCell id="1" parent="0" />
         <mxCell id="title" parent="1" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=24;fontStyle=1;fontColor=#202124;" value="TSUGIAI - ユーザーフロー" vertex="1">
           <mxGeometry height="40" width="360" x="520" y="20" as="geometry" />
         </mxCell>
-        <mxCell id="template-section" parent="1" style="swimlane;fontStyle=1;horizontal=1;startSize=30;fillColor=#E8F5E9;strokeColor=#43A047;fontSize=14;swimlaneFillColor=#F1F8E9;" value="1. チェックリストテンプレート作成フロー" vertex="1">
+        <mxCell id="template-section" parent="1" style="swimlane;fontStyle=1;horizontal=1;startSize=30;fillColor=#E8F5E9;strokeColor=#43A047;fontSize=14;swimlaneFillColor=#F1F8E9;" value="1. チェックリストテンプレート作成フロー(管理者向け)" vertex="1">
           <mxGeometry height="350" width="400" x="40" y="80" as="geometry" />
         </mxCell>
         <mxCell id="t-start" parent="template-section" style="ellipse;whiteSpace=wrap;html=1;fillColor=#C8E6C9;strokeColor=#43A047;fontSize=11;" value="開始" vertex="1">
